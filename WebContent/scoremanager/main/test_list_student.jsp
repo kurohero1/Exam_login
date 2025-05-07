@@ -15,7 +15,7 @@
                 </c:choose>
             </h2>
 
-            <!-- 検索フォーム部分（保持不变） -->
+            <!-- 検索フォーム部分 -->
             <div class="border border-bottom mx-3 mb-2 px-3 py-2 align-items-center rounded" id="filter">
                 <!-- 科目検索フォーム -->
                 <form action="TestListSubjectExecute.action" method="get">
@@ -88,7 +88,7 @@
 				    <div style="margin-top:20px;">
 				        <h4 style="padding-bottom:5px; border-bottom:1px solid #eee;">科目: ${subjectName}</h4>
 
-				        <!-- 表头 -->
+
 				        <div style="display:grid; grid-template-columns:repeat(6, 1fr); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px;">
 				            <div style="padding:3px; font-weight:bold;">入学年度</div>
 				            <div style="padding:3px; font-weight:bold;">クラス</div>
@@ -98,7 +98,7 @@
 				            <div style="padding:3px; font-weight:bold;">2回目</div>
 				        </div>
 
-				        <!-- 数据行 -->
+
 				        <c:forEach var="student" items="${testList}">
 				            <div style="display:grid; grid-template-columns:repeat(6, 1fr); margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #eee;">
 				                <div style="padding:3px;">${student.entYear}</div>
@@ -123,7 +123,7 @@
 				    <div style="margin-top:20px;">
 				        <h4 style="padding-bottom:5px; border-bottom:1px solid #eee;">氏名：${student.name} (${student.no})</h4>
 
-				        <!-- 表头 -->
+
 				        <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px;">
 				            <div style="padding:3px; font-weight:bold;">科目コード</div>
 				            <div style="padding:3px; font-weight:bold;">科目名</div>
@@ -131,7 +131,7 @@
 				            <div style="padding:3px; font-weight:bold;">点数</div>
 				        </div>
 
-				        <!-- 数据行 -->
+
 				        <c:forEach var="test" items="${testList}">
 				            <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #eee;">
 				                <div style="padding:3px;">${test.subjectCd}</div>
