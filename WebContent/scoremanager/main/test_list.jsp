@@ -8,7 +8,7 @@
 
     <c:param name="content">
         <section class="me-4">
-            <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績一覧（科目）</h2>
+            <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
 
             <div class="border border-bottom mx-3 mb-2 px-3 py-2 align-items-center rounded" id="filter">
 				<form action="TestListSubjectExecute.action" method="get">
