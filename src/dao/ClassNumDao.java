@@ -180,17 +180,15 @@ public class ClassNumDao extends Dao {
 	public int insertClass(ClassNum classNum) throws Exception {
 	    Connection con = getConnection();
 
-	    // 修改查询条件，确保检查班级编号和学校的组合
 	    PreparedStatement st = con.prepareStatement("SELECT class_num FROM class_num WHERE class_num = ? AND school_cd = ?");
 	    st.setString(1, classNum.getClass_num());
 	    st.setString(2, classNum.getSchool().getCd());
 	    ResultSet rs = st.executeQuery();
 
 	    if (rs.next()) {
-	        return 0; // 如果班级编号和学校已经存在，返回 0
+	        return 0; 
 	    }
 
-	    // 如果不存在，插入新的班级
 	    st = con.prepareStatement("INSERT INTO class_num (school_cd, class_num) VALUES (?, ?)");
 	    st.setString(1, classNum.getSchool().getCd());
 	    st.setString(2, classNum.getClass_num());
@@ -254,7 +252,6 @@ public class ClassNumDao extends Dao {
 	    ResultSet resultSet = null;
 
 	    try {
-	        // 修改查询条件，确保检查班级编号和学校的组合
 	        statement = connection.prepareStatement("select class_num from class_num where class_num=? and school_cd=?");
 	        statement.setString(1, classNum);
 	        statement.setString(2, schoolCd);
