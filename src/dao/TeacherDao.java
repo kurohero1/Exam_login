@@ -130,7 +130,7 @@ public class TeacherDao extends Dao {
 	}
 
 	public int insertTeacher(Teacher teacher) throws Exception {
-	    // 检查输入是否为空，避免 NullPointerException 和数据库错误
+	    // 入力が空でないかを確認し、NullPointerException やデータベースエラーを防ぎます。
 	    if (teacher == null || teacher.getId() == null || teacher.getSchool() == null || teacher.getSchool().getCd() == null) {
 	        throw new IllegalArgumentException("Teacher 或其必要属性为 null");
 	    }
@@ -140,10 +140,10 @@ public class TeacherDao extends Dao {
 	    String password = teacher.getPassword();
 	    String name = teacher.getName();
 
-	    // 使用 try-with-resources 自动关闭连接和语句对象
+	    // try-with-resources を使用して、接続およびステートメントオブジェクトを自動的にクローズします。
 	    try (Connection con = getConnection()) {
 
-	        // 先检查是否已存在
+	        // まず、既に存在しているかどうかを確認します。
 	        String checkSql = "SELECT id FROM teacher WHERE id = ? AND school_cd = ?";
 	        try (PreparedStatement checkStmt = con.prepareStatement(checkSql)) {
 	            checkStmt.setString(1, id);
@@ -151,12 +151,12 @@ public class TeacherDao extends Dao {
 	            ResultSet rs = checkStmt.executeQuery();
 
 	            if (rs.next()) {
-	                // 已存在，返回 0 表示未插入
+	                // 既に存在している場合は、挿入されていないことを示すために 0 を返します。
 	                return 0;
 	            }
 	        }
 
-	        // 插入新记录
+	        // 新しいレコードを挿入します。
 	        String insertSql = "INSERT INTO teacher (school_cd, id, password, name) VALUES (?, ?, ?, ?)";
 	        try (PreparedStatement insertStmt = con.prepareStatement(insertSql)) {
 	            insertStmt.setString(1, schoolCd);
@@ -164,7 +164,7 @@ public class TeacherDao extends Dao {
 	            insertStmt.setString(3, password);
 	            insertStmt.setString(4, name);
 
-	            return insertStmt.executeUpdate(); // 返回插入行数
+	            return insertStmt.executeUpdate(); 
 	        }
 	    }
 	}
