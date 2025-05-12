@@ -33,7 +33,7 @@ public class TeacherUpdateExecuteAction extends Action {
                 req.setAttribute("teacher", teacher);
                 req.getRequestDispatcher("teacher_update_success.jsp").forward(req, res);
             } else {
-                req.setAttribute("error", "更新失敗");
+                req.setAttribute("error", "更新に失敗しました。");
                 req.getRequestDispatcher("teacher_update.jsp").forward(req, res);
             }
         } else {
