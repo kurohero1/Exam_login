@@ -13,10 +13,19 @@
                 <div class="row mx-3 mb-3 py-2">
 
                     <!-- 学校 -->
-                    <div class="mb-3">
-                        <label class="form-label">学校</label>
-                        <p class="form-control-plaintext">${teacher.school.cd}</p>
-                        <input type="hidden" name="schoolCd" value="${teacher.school.cd}" />
+
+
+
+                    <div class="col-12 mt-3 mb-3">
+                        <label class="form-label" for="schoolCd">学校</label>
+                        <input type="text" class="form-control" name="schoolCd" id="schoolCd"
+                               value="${param.schoolCd}" placeholder="学校を入力してください。" required>
+                        <div class="invalid-feedback" style="color: orange;">
+                            学校を入力してください。
+                        </div>
+                        <c:if test="${not empty duplicateError}">
+                            <div class="text-warning ms-1">${duplicateError}</div>
+                        </c:if>
                     </div>
 
                     <!-- 教員番号 -->
@@ -67,6 +76,5 @@
         </section>
     </c:param>
 </c:import>
-
 
 
