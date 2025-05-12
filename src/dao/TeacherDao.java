@@ -132,7 +132,7 @@ public class TeacherDao extends Dao {
 	public int insertTeacher(Teacher teacher) throws Exception {
 	    // 入力が空でないかを確認し、NullPointerException やデータベースエラーを防ぎます。
 	    if (teacher == null || teacher.getId() == null || teacher.getSchool() == null || teacher.getSchool().getCd() == null) {
-	        throw new IllegalArgumentException("Teacher 或其必要属性为 null");
+	        throw new IllegalArgumentException("Teacher またはその必須属性が null です。");
 	    }
 
 	    String schoolCd = teacher.getSchool().getCd();
