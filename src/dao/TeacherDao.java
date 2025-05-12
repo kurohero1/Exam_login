@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import bean.School;
 import bean.Teacher;
 
 public class TeacherDao extends Dao {
@@ -91,4 +94,134 @@ public class TeacherDao extends Dao {
 		}
 		return teacher;
 	}
+
+	public List<String> filter(School school) throws Exception {
+		List<String> list = new ArrayList<>();
+		Connection connection = getConnection();
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement("select id from teacher where school_cd = ? order by id");
+			statement.setString(1, school.getCd());
+
+			ResultSet rSet = statement.executeQuery();
+			while (rSet.next()) {
+				list.add(rSet.getString("id"));
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (statement != null) {
+				try {
+					statement.close();
+
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+		return list;
+	}
+
+	public int insertTeacher(Teacher teacher) throws Exception {
+	    // 检查输入是否为空，避免 NullPointerException 和数据库错误
+	    if (teacher == null || teacher.getId() == null || teacher.getSchool() == null || teacher.getSchool().getCd() == null) {
+	        throw new IllegalArgumentException("Teacher 或其必要属性为 null");
+	    }
+
+	    String schoolCd = teacher.getSchool().getCd();
+	    String id = teacher.getId();
+	    String password = teacher.getPassword();
+	    String name = teacher.getName();
+
+	    // 使用 try-with-resources 自动关闭连接和语句对象
+	    try (Connection con = getConnection()) {
+
+	        // 先检查是否已存在
+	        String checkSql = "SELECT id FROM teacher WHERE id = ? AND school_cd = ?";
+	        try (PreparedStatement checkStmt = con.prepareStatement(checkSql)) {
+	            checkStmt.setString(1, id);
+	            checkStmt.setString(2, schoolCd);
+	            ResultSet rs = checkStmt.executeQuery();
+
+	            if (rs.next()) {
+	                // 已存在，返回 0 表示未插入
+	                return 0;
+	            }
+	        }
+
+	        // 插入新记录
+	        String insertSql = "INSERT INTO teacher (school_cd, id, password, name) VALUES (?, ?, ?, ?)";
+	        try (PreparedStatement insertStmt = con.prepareStatement(insertSql)) {
+	            insertStmt.setString(1, schoolCd);
+	            insertStmt.setString(2, id);
+	            insertStmt.setString(3, password);
+	            insertStmt.setString(4, name);
+
+	            return insertStmt.executeUpdate(); // 返回插入行数
+	        }
+	    }
+	}
+
+	public boolean update(Teacher teacher) throws Exception {
+	    boolean result = false;
+
+	    String sql = "UPDATE teacher SET password = ?, name = ? WHERE id = ? AND school_cd = ?";
+
+	    try (Connection con = getConnection();
+	         PreparedStatement stmt = con.prepareStatement(sql)) {
+
+	        stmt.setString(1, teacher.getPassword());
+	        stmt.setString(2, teacher.getName());
+	        stmt.setString(3, teacher.getId());
+	        stmt.setString(4, teacher.getSchool().getCd());
+
+	        int rows = stmt.executeUpdate();
+	        result = (rows > 0);
+	    }
+
+	    return result;
+	}
+
+	public boolean deleteTeacher(String id) throws Exception {
+	    Connection connection = getConnection();
+	    PreparedStatement statement = null;
+	    int rowsAffected = 0;
+
+	    try {
+	        String sql = "DELETE FROM teacher WHERE id = ?";
+	        statement = connection.prepareStatement(sql);
+	        statement.setString(1, id);
+
+	        rowsAffected = statement.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new Exception("クラス情報削除エラー: " + e.getMessage());
+	    } finally {
+	        if (statement != null) {
+	            try {
+	                statement.close();
+	            } catch (SQLException sqle) {
+	                throw sqle;
+	            }
+	        }
+	        if (connection != null) {
+	            try {
+	                connection.close();
+	            } catch (SQLException sqle) {
+	                throw sqle;
+	            }
+	        }
+	    }
+
+	    return rowsAffected > 0;
+	}
+
+
+
 }
