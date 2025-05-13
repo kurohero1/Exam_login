@@ -15,8 +15,7 @@ import bean.TestListSubject;
 
 public class TestListSubjectDao extends Dao {
 
-    // 使用していないSql
-    private String baseSql = "SELECT * FROM testlistsubject WHERE studentNo=?";
+
 
     public List<TestListSubject> filter(int entYear, String classNum,
                                       Subject subject, School school) throws Exception {
