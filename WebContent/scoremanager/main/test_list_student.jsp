@@ -88,7 +88,7 @@
 				    <div style="margin-top:20px;">
 				        <h4 style="padding-bottom:5px; border-bottom:1px solid #eee;">科目: ${subjectName}</h4>
 
-
+				        <!-- 表頭 -->
 				        <div style="display:grid; grid-template-columns:repeat(6, 1fr); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px;">
 				            <div style="padding:3px; font-weight:bold;">入学年度</div>
 				            <div style="padding:3px; font-weight:bold;">クラス</div>
@@ -98,7 +98,7 @@
 				            <div style="padding:3px; font-weight:bold;">2回目</div>
 				        </div>
 
-
+				        <!-- データ -->
 				        <c:forEach var="student" items="${testList}">
 				            <div style="display:grid; grid-template-columns:repeat(6, 1fr); margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #eee;">
 				                <div style="padding:3px;">${student.entYear}</div>
@@ -119,11 +119,11 @@
 				</c:when>
 
                 <%-- 学生別表示モード --%>
-               <c:when test="${displayMode == 'student'}">
+               <c:when test="${displayMode == 'student' && not empty testList}">
 				    <div style="margin-top:20px;">
 				        <h4 style="padding-bottom:5px; border-bottom:1px solid #eee;">氏名：${student.name} (${student.no})</h4>
 
-
+				        <!-- 表頭 -->
 				        <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-bottom:5px; border-bottom:1px solid #eee; padding-bottom:5px;">
 				            <div style="padding:3px; font-weight:bold;">科目コード</div>
 				            <div style="padding:3px; font-weight:bold;">科目名</div>
@@ -131,7 +131,7 @@
 				            <div style="padding:3px; font-weight:bold;">点数</div>
 				        </div>
 
-
+				        <!-- データ -->
 				        <c:forEach var="test" items="${testList}">
 				            <div style="display:grid; grid-template-columns:repeat(4, 1fr); margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #eee;">
 				                <div style="padding:3px;">${test.subjectCd}</div>
@@ -147,21 +147,32 @@
 				        </c:forEach>
 				    </div>
 				</c:when>
+				<c:otherwise>
+				    <c:choose>
+				        <%-- データなし --%>
+				        <c:when test="${displayMode == 'subject' && empty testList}">
+				            <div>成績情報が存在しませんでした</div>
+				        </c:when>
 
-                <%-- 初期状態 --%>
-                <c:otherwise>
-                    <div class="alert alert-secondary mx-3 mt-3">
-                        科目情報を選択または学生情報を入力して検索ボタンをクリックしてください。
-                    </div>
-                </c:otherwise>
+				        <c:when test="${displayMode == 'student' && empty testList}">
+					        <div>
+					        氏名：${student.name} (${student.no})
+				        	</div>
+				            <div>成績情報が存在しませんでした</div>
+				        </c:when>
+
+				        <%-- 初期画面 --%>
+				        <c:otherwise>
+				            <div class="alert" style="color: #00FFFF;">
+							    科目情報を選択または学生情報を入力して検索ボタンをクリックしてください。
+							</div>
+				        </c:otherwise>
+				    </c:choose>
+				</c:otherwise>
+
             </c:choose>
         </section>
     </c:param>
 </c:import>
 
 
-<c:if test="${not empty error}">
-    <div style="color: #ffcc00; background-color: #fff8e1; padding: 10px; margin: 10px 0; border-left: 4px solid #ffc107;">
-        ${error}
-    </div>
-</c:if>
