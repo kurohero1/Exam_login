@@ -24,7 +24,10 @@ public class LogoutAction extends Action {
 		//ビジネスロジック 4
 		if (session.getAttribute("user") != null) {
 			session.invalidate();
-		}
+		}else {
+            req.setAttribute("error", "クラス情報はもらえません");
+            req.getRequestDispatcher("/error.jsp").forward(req, res);
+        }
 
 		//DBへデータ保存 5
 		//なし
