@@ -12,8 +12,7 @@ import bean.TestListStudent;
 
 public class TestListStudentDao extends Dao {
 
-    // 使用していないSql
-    private String baseSql = "SELECT * FROM TestListStudent WHERE subjectCd=?";
+
 
     public List<TestListStudent> filter(Student student) throws Exception {
         //使用しているSql
