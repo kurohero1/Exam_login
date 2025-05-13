@@ -249,25 +249,47 @@ public class TestDao extends Dao {
 	}
 
 	public boolean save(List<Test> list) throws Exception {
+	    // 1. 获取连接并检查非空
 	    Connection connection = getConnection();
-	    boolean result = false;
-	    connection.setAutoCommit(false); // トランザクション開始
-
-	    try {
-	        for (Test test : list) {
-	            result = save(test, connection);
-	        }
-	        connection.commit(); // コミット
-	    } catch(Exception e) {
-	        connection.rollback(); // ロールバック
-	        throw e;
-	    } finally {
-	        if (connection != null) connection.close();
+	    if (connection == null) {
+	        throw new SQLException("Failed to get database connection");
 	    }
 
-	    return result;
-	}
+	    boolean allSuccess = true; // 标记所有操作是否全部成功
+	    try {
+	        connection.setAutoCommit(false); // 事务开始
 
+	        // 2. 遍历执行并记录结果
+	        for (Test test : list) {
+	            if (!save(test, connection)) {
+	                allSuccess = false; // 部分失败
+	            }
+	        }
+
+	        // 3. 根据结果提交或回滚
+	        if (allSuccess) {
+	            connection.commit();
+	        } else {
+	            connection.rollback();
+	        }
+	    } catch (SQLException e) {
+	        // 4. 异常时尝试回滚
+	        try {
+	            if (connection != null && !connection.isClosed()) {
+	                connection.rollback();
+	            }
+	        } catch (SQLException rollbackEx) {
+	            e.addSuppressed(rollbackEx); // 记录回滚异常
+	        }
+	        throw e;
+	    } finally {
+	        // 5. 安全关闭连接
+	        if (connection != null && !connection.isClosed()) {
+	            connection.close();
+	        }
+	    }
+	    return allSuccess;
+	}
 
 	private boolean save(Test test , Connection connection )throws Exception{
 
@@ -284,39 +306,29 @@ public class TestDao extends Dao {
             // 試験が存在していた場合はUPDATE、しなかった場合はINSERTを実行
 
             if (tes == null) {
-
+            	// 新規登録
             	statement = connection.prepareStatement(
-            		    "UPDATE TEST SET POINT = ?, CLASS_NUM = ? " +
-            		    "WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?");
-
-            		statement.setInt(1, test.getPoint());
-            		statement.setString(2, test.getClassNum());
-            		statement.setString(3, test.getStudent().getNo());
-            		statement.setString(4, test.getSubject().getCd());
-            		statement.setString(5, test.getSchool().getCd());
-            		statement.setInt(6, test.getNo());
+						"INSERT INTO test(student_no, subject_cd, school_cd, no, point, class_num) values(?, ?, ?, ?, ?, ?)");
+				statement.setString(1, test.getStudent().getNo());
+				statement.setString(2, test.getSubject().getCd());
+				statement.setString(3, test.getSchool().getCd());
+				statement.setInt(4, test.getNo());
+				statement.setInt(5, test.getPoint());
+				statement.setString(6, test.getClassNum());
 
 
             } else {
-
+            	// 更新
                 statement = connection.prepareStatement(
 
-                		"UPDATE TEST SET STUDENT_NO = ?, SUBJECT_CD = ?, SCHOOL_CD = ? NO = ? POINT = ? CLASS_NUM = ? WHERE ...");
+                		"UPDATE TEST SET POINT = ? WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND SCHOOL_CD = ? AND NO = ?");
 
                 // 送られたtestのデータをセット
-
-                statement.setString(1, test.getStudent().getNo());
-
-                statement.setString(2, test.getSubject().getCd());
-
-                statement.setString(3, test.getSchool().getCd());
-
-                statement.setInt(4, test.getNo());
-
-                statement.setInt(5, test.getPoint());
-
-                statement.setString(6, test.getClassNum());
-
+                statement.setInt(1, test.getPoint());
+                statement.setString(2, test.getStudent().getNo());
+                statement.setString(3, test.getSubject().getCd());
+                statement.setString(4, test.getSchool().getCd());
+                statement.setInt(5, test.getNo());
             }
 
             // 実行して影響を受けた行数を確認
@@ -338,20 +350,6 @@ public class TestDao extends Dao {
                 try {
 
                     statement.close();
-
-                } catch (SQLException sqle) {
-
-                    throw sqle;
-
-                }
-
-            }
-
-            if (connection != null) {
-
-                try {
-
-                    connection.close();
 
                 } catch (SQLException sqle) {
 
