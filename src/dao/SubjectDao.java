@@ -88,15 +88,18 @@ public class SubjectDao extends Dao {
 
         Connection connection = getConnection();
 
+
         PreparedStatement statement = null;
 
         ResultSet rSet = null;
+
 
         try {
 
             statement = connection.prepareStatement(baseSql + " ORDER BY cd ASC");
 
             statement.setString(1, school.getCd());
+
 
             rSet = statement.executeQuery();
 
