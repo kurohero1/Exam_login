@@ -38,16 +38,17 @@
         <div class="mt-2 text-warning">${errors.get("2")}</div>
 
         <!-- 変更ボタン -->
-        <div class="mx-auto py-2 mt-4">
+        <div class="mx-auto py-2 mt-2">
           <button class="btn btn-primary text-white fw-bold px-4 py-2"
                   type="submit">変更</button>
         </div>
       </form>
 
-      <!-- 戻るリンク，蓝色带下划线 -->
+      <!-- 戻るリンク -->
       <div class="mt-3">
         <a href="SubjectList.action" style="color: blue; text-decoration: underline;">戻る</a>
       </div>
     </section>
   </c:param>
 </c:import>
+
