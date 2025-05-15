@@ -13,24 +13,18 @@
 <section>
 <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">科目情報削除</h2>
 <form action="SubjectDeleteExecute.action" method="post">
-<!-- 科目コード (表示のみ) -->
-<div class="form-group">
-    <label>科目コード</label>
-    <p class="form-control-static">${cd}</p>
-    <input type="hidden" name="cd" value="${cd}">
-</div>
 
-<!-- 科目名 (表示のみ) -->
 <div class="form-group">
-    <label>科目名</label>
-    <p class="form-control-static">${name}</p>
-    <input type="hidden" name="name" value="${name}">
-</div>
-
-<div class="mx-auto py-2">
+    <p class="form-control-static">「${name}(${cd})」を削除してもよろしいですか</p>
+    <input type="hidden" name="cd" value="${name}${cd}">
     <button class="btn btn-danger fw-bold px-4 py-2" type="submit">削除</button>
-    <a href="SubjectList.action" class="btn btn-outline-secondary ms-2">戻る</a>
 </div>
+
+
+<div class="mx-auto py-2 mt-5">
+    <a href="SubjectList.action" style="color: blue; text-decoration: underline;">戻る</a>
+</div>
+
 </form>
 </section>
 </c:param>
