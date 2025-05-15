@@ -16,7 +16,6 @@
 
 <c:choose>
 <c:when test="${subjects.size()>0}">
-    <div>検索結果:${subjects.size()}件</div>
     <table class="table table-hover">
         <tr>
             <th>科目コード</th>
