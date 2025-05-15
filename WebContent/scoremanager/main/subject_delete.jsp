@@ -17,7 +17,6 @@
 <div class="form-group mt-4">
     <p class="form-control-static">「${name}(${cd})」を削除してもよろしいですか</p>
 
-    <!-- 提交用的真正字段，只提交 cd，不拼接 name -->
     <input type="hidden" name="cd" value="${cd}">
 
     <button class="btn btn-danger fw-bold px-4 py-2" type="submit">削除</button>
