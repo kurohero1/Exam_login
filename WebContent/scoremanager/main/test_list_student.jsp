@@ -76,7 +76,7 @@
                             <input type="hidden" name="f" value="st">
                             <button class="btn btn-secondary" id="student-button">検索</button>
                         </div>
-                        <div class="col-4 mt-2 text-warning">${errors.f4}</div>
+                        <div class="mt-2 text-warning">${errors.f4}</div>
                     </div>
                 </form>
             </div>
