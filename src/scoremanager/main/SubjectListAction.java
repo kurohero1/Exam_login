@@ -16,21 +16,32 @@ public class SubjectListAction extends Action {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // セッションから現在のユーザー（教師）を取得
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("user");
 
-        // 获取学校信息
+        // 教師がログインしていない場合
+        if (teacher == null) {
+            // エラーメッセージをリクエストにセット
+        	request.setAttribute("error", "ログインしてください。");
+            // ログイン画面にフォワード
+        	request.getRequestDispatcher("../login.jsp").forward(request, response);
+            return;
+        }
+
+        // ログイン中の教師が所属する学校情報を取得
         School school = teacher.getSchool();
 
+        // SubjectDaoを使って、学校に関連する科目情報を取得
         SubjectDao subjectDao = new SubjectDao();
 
-        // 获取该学校的所有科目（使用现有的filter方法）
+        // filterメソッドを使用して、指定された学校に紐づくすべての科目を取得
         List<Subject> subjects = subjectDao.filter(school);
 
-        // 设置请求属性
+        // 取得した科目リストをリクエストにセット
         request.setAttribute("subjects", subjects);
 
-        // 转发到JSP页面
+        // JSPページ「subject_list.jsp」に転送
         request.getRequestDispatcher("subject_list.jsp").forward(request, response);
     }
 }
