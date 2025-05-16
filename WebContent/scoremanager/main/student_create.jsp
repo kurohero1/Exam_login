@@ -61,9 +61,13 @@
                     </div>
 
                     <!-- 登録ボタン -->
-                    <div class="col-2 mt-2">
-					    <button type="submit" class="btn btn-primary text-white" style="width: 120px; height: 40px; font-size: 16px;">登録して終了</button>
+                    <!-- 登録ボタン -->
+					<div class="col-2 mt-2">
+					    <button type="submit" class="btn text-white" style="background-color: #6c757d; border: none; width: 120px; height: 40px; font-size: 16px;">
+					        登録して終了
+					    </button>
 					</div>
+
                 </div>
             </form>
 
@@ -100,6 +104,7 @@
         }
     });
 </script>
+
 
 
 
